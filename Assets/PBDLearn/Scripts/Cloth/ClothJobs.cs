@@ -59,13 +59,12 @@ namespace PBDLearn
             var m = masses[index];
             
             var myDt = dt;
-            int cond = m>0;
             var normal = normals[index];
             var fieldForceAtNormal = math.dot(fieldForce,normal) * normal;
             var v1 = v + ClothSimulator.G * myDt + fieldForceAtNormal * myDt / m;
             v1 *= math.max(0,(1 - damper * myDt / m)); //阻尼
 
-            predictPositions[index] = p + v1 * myDt * cond;
+            predictPositions[index] =  m > 0 ? p + v1 * myDt : p;
             
         }
     }
