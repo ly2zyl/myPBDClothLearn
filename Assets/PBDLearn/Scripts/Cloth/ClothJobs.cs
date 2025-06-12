@@ -59,7 +59,7 @@ namespace PBDLearn
             var m = masses[index];
             
             var myDt = dt;
-            var cond = m>0;
+            int cond = m>0;
             var normal = normals[index];
             var fieldForceAtNormal = math.dot(fieldForce,normal) * normal;
             var v1 = v + ClothSimulator.G * myDt + fieldForceAtNormal * myDt / m;
