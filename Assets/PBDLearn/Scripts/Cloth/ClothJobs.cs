@@ -50,22 +50,22 @@ namespace PBDLearn
         public NativeArray<float3> predictPositions;
         public float3 fieldForce;
         public float damper;
+        [ReadOnly]
         public float dt;
         public void Execute(int index)
         {
             var p = positions[index];
             var v = velocities[index];
             var m = masses[index];
-            if(m > 0){
-                var normal = normals[index];
-                var fieldForceAtNormal = math.dot(fieldForce,normal) * normal;
-                var v1 = v + ClothSimulator.G * dt + fieldForceAtNormal * dt / m;
-                v1 *= math.max(0,(1 - damper * dt / m)); //阻尼
-                var p1 = p + v1 * dt;
-                predictPositions[index] = p1;
-            }else{
-                predictPositions[index] = p;
-            }
+            
+            var myDt = dt;
+            var cond = m>0;
+            var normal = normals[index];
+            var fieldForceAtNormal = math.dot(fieldForce,normal) * normal;
+            var v1 = v + ClothSimulator.G * myDt + fieldForceAtNormal * myDt / m;
+            v1 *= math.max(0,(1 - damper * myDt / m)); //阻尼
+
+            predictPositions[index] = p + v1 * myDt * cond;
             
         }
     }
